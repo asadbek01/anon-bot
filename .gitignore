@@ -1,0 +1,10 @@
+.env
+bot.db
+__pycache__/
+venv/
+*.log
+.vscode/
+*.db
+Thumbs.db
+*.zip
+.DS_Store
