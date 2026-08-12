@@ -85,15 +85,9 @@ async def click_webhook(request: web.Request):
             return web.json_response({"error": CLICK_ERROR_TRANSACTION_NOT_FOUND, "error_note": "Not found"})
 
         await db.update_payment_status(payment_id, "paid")
-        # payments jadvalida user_id ni topib premium beramiz
-        # (oddiylik uchun to'g'ridan-to'g'ri so'rov)
-        import aiosqlite
-        from config import DB_PATH
-        async with aiosqlite.connect(DB_PATH) as conn:
-            cur = await conn.execute("SELECT user_id FROM payments WHERE id = ?", (payment_id,))
-            row = await cur.fetchone()
-        if row:
-            await db.set_premium(row[0], PREMIUM_DAYS)
+        payment = await db.get_payment(payment_id)
+        if payment:
+            await db.set_premium(payment["user_id"], PREMIUM_DAYS)
 
         return web.json_response({
             "click_trans_id": data.get("click_trans_id"),
@@ -135,13 +129,7 @@ async def payme_webhook(request: web.Request):
 
     if method == "CheckPerformTransaction":
         order_id = params.get("account", {}).get("order_id")
-        payment = None
-        if order_id:
-            import aiosqlite
-            from config import DB_PATH
-            async with aiosqlite.connect(DB_PATH) as conn:
-                cur = await conn.execute("SELECT id FROM payments WHERE id = ?", (order_id,))
-                payment = await cur.fetchone()
+        payment = await db.get_payment(int(order_id)) if order_id else None
         if not payment:
             return web.json_response({"error": {"code": -31050, "message": "Order not found"}, "id": req_id})
         return web.json_response({"result": {"allow": True}, "id": req_id})

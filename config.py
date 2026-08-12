@@ -17,7 +17,8 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 BOT_USERNAME = os.getenv("BOT_USERNAME", "")
 ADMIN_IDS = _split_ids(os.getenv("ADMIN_IDS", ""))
 
-DB_PATH = os.getenv("DB_PATH", "bot.db")
+DB_PATH = os.getenv("DB_PATH", "bot.db")  # Eskisi, endi ishlatilmaydi (Supabase'ga o'tildi)
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 # Eski yagona narx o'zgaruvchilari (webhook_server.py va boshqa joylarda
 # umumiy default sifatida ishlatiladi)
