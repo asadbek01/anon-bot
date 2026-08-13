@@ -10,7 +10,44 @@ from states import AnonMessageStates
 router = Router(name="anonymous")
 
 
-@router.message(AnonMessageStates.waiting_for_message, F.text)
+def _content_preview(message: Message) -> str:
+    """Ma'lumotlar bazasida saqlash va admin panelda ko'rsatish uchun qisqa matn."""
+    if message.text:
+        return message.text
+    if message.caption:
+        return message.caption
+
+    mapping = {
+        "photo": "📷 [Rasm]",
+        "video": "🎥 [Video]",
+        "animation": "🎞 [GIF]",
+        "sticker": "🌟 [Stiker]",
+        "voice": "🎤 [Ovozli xabar]",
+        "video_note": "⭕ [Doira video]",
+        "document": "📎 [Fayl]",
+        "audio": "🎵 [Audio]",
+    }
+    return mapping.get(message.content_type, f"[{message.content_type}]")
+
+
+async def _relay(bot: Bot, target_id: int, source: Message,
+                  header_text_key: str, header_text_key_media: str,
+                  lang: str, keyboard) -> None:
+    """Xabarni (matn yoki media) boshqa foydalanuvchiga anonim tarzda yetkazadi."""
+    if source.content_type == "text":
+        await bot.send_message(
+            target_id,
+            t(header_text_key, lang, text=source.text),
+            reply_markup=keyboard,
+        )
+    else:
+        # Avval qisqa sarlavha, keyin asl kontent (rasm/video/gif/stiker/...) o'zgarishsiz ko'chiriladi.
+        # copy_to "kimdan kelgani" haqida hech qanday iz qoldirmaydi — anonimlik saqlanadi.
+        await bot.send_message(target_id, t(header_text_key_media, lang))
+        await source.copy_to(target_id, reply_markup=keyboard)
+
+
+@router.message(AnonMessageStates.waiting_for_message)
 async def receive_anon_message(message: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     owner_id = data.get("target_user_id")
@@ -26,18 +63,19 @@ async def receive_anon_message(message: Message, state: FSMContext, bot: Bot):
                               reply_markup=main_menu_keyboard(lang, message.from_user.id))
         return
 
-    msg_id = await db.save_message(message.from_user.id, owner_id, message.text)
+    preview = _content_preview(message)
+    msg_id = await db.save_message(message.from_user.id, owner_id, preview)
 
     owner = await db.get_user(owner_id)
     owner_lang = owner["language"] if owner else "uz"
-    owner_is_premium = await db.is_premium_active(owner_id)
+
+    # Birinchi xabar — qabul qiluvchi hali yuboruvchini bilmaydi, shuning uchun
+    # "kim yozganini ko'rish" tugmasi ko'rsatiladi.
+    keyboard = message_action_keyboard(owner_lang, msg_id, include_reveal=True)
 
     try:
-        await bot.send_message(
-            owner_id,
-            t("new_anonymous_message", owner_lang, text=message.text),
-            reply_markup=message_action_keyboard(owner_lang, msg_id, owner_is_premium),
-        )
+        await _relay(bot, owner_id, message, "new_anonymous_message",
+                     "new_anonymous_message_media", owner_lang, keyboard)
     except Exception:
         # Owner botni bloklagan yoki chat topilmadi bo'lishi mumkin — jim o'tkazamiz
         pass
@@ -60,7 +98,7 @@ async def start_reply(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
-@router.message(AnonMessageStates.waiting_for_reply, F.text)
+@router.message(AnonMessageStates.waiting_for_reply)
 async def send_reply(message: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     original_id = data.get("reply_to_message_id")
@@ -77,16 +115,21 @@ async def send_reply(message: Message, state: FSMContext, bot: Bot):
         return
 
     original_sender_id = original["sender_id"]
-    await db.save_message(message.from_user.id, original_sender_id, message.text,
-                           is_reply=True, parent_id=original_id)
+    preview = _content_preview(message)
+    new_msg_id = await db.save_message(message.from_user.id, original_sender_id, preview,
+                                        is_reply=True, parent_id=original_id)
 
-    sender = await db.get_user(original_sender_id)
-    sender_lang = sender["language"] if sender else "uz"
+    recipient = await db.get_user(original_sender_id)
+    recipient_lang = recipient["language"] if recipient else "uz"
+
+    # Javob zanjirida ikkala taraf ham allaqachon bir-birini bilishadi (kontekstdan),
+    # shuning uchun "kim yozganini ko'rish" tugmasi kerak emas — faqat "Javob berish"
+    # tugmasi bo'ladi, shu orqali suhbat cheksiz davom etaveradi.
+    keyboard = message_action_keyboard(recipient_lang, new_msg_id, include_reveal=False)
+
     try:
-        await bot.send_message(
-            original_sender_id,
-            t("you_got_reply", sender_lang, text=message.text),
-        )
+        await _relay(bot, original_sender_id, message, "you_got_reply",
+                     "you_got_reply_media", recipient_lang, keyboard)
     except Exception:
         pass
 

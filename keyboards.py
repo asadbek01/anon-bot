@@ -29,12 +29,13 @@ def main_menu_keyboard(lang: str, user_id: int) -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
 
-def message_action_keyboard(lang: str, message_id: int, receiver_is_premium: bool) -> InlineKeyboardMarkup:
+def message_action_keyboard(lang: str, message_id: int, include_reveal: bool = True) -> InlineKeyboardMarkup:
     buttons = [
         [InlineKeyboardButton(text=t("reply_button", lang), callback_data=f"reply:{message_id}")],
     ]
-    reveal_text = t("reveal_button", lang)
-    buttons.append([InlineKeyboardButton(text=reveal_text, callback_data=f"reveal:{message_id}")])
+    if include_reveal:
+        reveal_text = t("reveal_button", lang)
+        buttons.append([InlineKeyboardButton(text=reveal_text, callback_data=f"reveal:{message_id}")])
     buttons.append(_reaction_row(message_id))
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 

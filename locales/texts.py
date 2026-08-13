@@ -143,6 +143,11 @@ TEXTS = {
         "en": "📩 <b>You received an anonymous message:</b>\n\n{text}",
         "ru": "📩 <b>Тебе пришло анонимное сообщение:</b>\n\n{text}",
     },
+    "new_anonymous_message_media": {
+        "uz": "📩 <b>Senga anonim xabar keldi:</b>",
+        "en": "📩 <b>You received an anonymous message:</b>",
+        "ru": "📩 <b>Тебе пришло анонимное сообщение:</b>",
+    },
     "reply_button": {
         "uz": "↩️ Javob berish",
         "en": "↩️ Reply",
@@ -191,6 +196,11 @@ TEXTS = {
         "uz": "✉️ <b>Sizning xabaringizga javob keldi:</b>\n\n{text}",
         "en": "✉️ <b>You got a reply to your message:</b>\n\n{text}",
         "ru": "✉️ <b>Пришёл ответ на твоё сообщение:</b>\n\n{text}",
+    },
+    "you_got_reply_media": {
+        "uz": "✉️ <b>Sizning xabaringizga javob keldi:</b>",
+        "en": "✉️ <b>You got a reply to your message:</b>",
+        "ru": "✉️ <b>Пришёл ответ на твоё сообщение:</b>",
     },
     "premium_info": {
         "uz": (
