@@ -119,6 +119,9 @@ async def reveal_sender(callback: CallbackQuery):
     else:
         who = t("unknown_username", lang, id=original["sender_id"])
 
+    if sender and await db.is_premium_active(sender["telegram_id"]):
+        who = f"{who} {t('premium_badge', lang)}"
+
     await callback.answer(t("reveal_result", lang, who=who), show_alert=True)
 
 

@@ -196,8 +196,8 @@ TEXTS = {
         "uz": (
             "💎 <b>Premium imkoniyatlari:</b>\n\n"
             "🕵️ Senga kim yozganini ko'rish\n"
-            "🚀 Xabarlar navbatsiz yetkaziladi\n"
-            "🏅 Profilingda maxsus belgi\n"
+            "🎭 Vanish mode — xabar o'qilgach o'chib ketadi\n"
+            "🏅 Ismingiz yonida maxsus belgi\n"
             "📊 Kengaytirilgan statistika\n\n"
             "{status}\n\n"
             "Muddatni tanlang 👇"
@@ -205,8 +205,8 @@ TEXTS = {
         "en": (
             "💎 <b>Premium features:</b>\n\n"
             "🕵️ See who's writing to you\n"
-            "🚀 Priority message delivery\n"
-            "🏅 Special badge on your profile\n"
+            "🎭 Vanish mode — messages disappear after being read\n"
+            "🏅 Special badge next to your name\n"
             "📊 Advanced statistics\n\n"
             "{status}\n\n"
             "Choose a duration 👇"
@@ -214,8 +214,8 @@ TEXTS = {
         "ru": (
             "💎 <b>Возможности Премиум:</b>\n\n"
             "🕵️ Видеть, кто тебе пишет\n"
-            "🚀 Приоритетная доставка сообщений\n"
-            "🏅 Специальный значок в профиле\n"
+            "🎭 Vanish mode — сообщения исчезают после прочтения\n"
+            "🏅 Специальный значок рядом с именем\n"
             "📊 Расширенная статистика\n\n"
             "{status}\n\n"
             "Выбери срок 👇"
@@ -299,6 +299,36 @@ TEXTS = {
             "↩️ Отвечено: {answered}\n"
             "📅 Дата регистрации: {joined}"
         ),
+    },
+    "stats_advanced": {
+        "uz": (
+            "\n\n💎 <b>Kengaytirilgan (Premium):</b>\n"
+            "😀 Jami reaksiyalar: {total_reactions}\n"
+            "🔥 Eng ko'p tushgan reaksiya: {top_reaction}\n"
+            "📈 Javob berish foizi: {reply_rate}%"
+        ),
+        "en": (
+            "\n\n💎 <b>Advanced (Premium):</b>\n"
+            "😀 Total reactions: {total_reactions}\n"
+            "🔥 Most common reaction: {top_reaction}\n"
+            "📈 Reply rate: {reply_rate}%"
+        ),
+        "ru": (
+            "\n\n💎 <b>Расширенная (Премиум):</b>\n"
+            "😀 Всего реакций: {total_reactions}\n"
+            "🔥 Самая частая реакция: {top_reaction}\n"
+            "📈 Процент ответов: {reply_rate}%"
+        ),
+    },
+    "no_reactions_yet": {
+        "uz": "hali yo'q",
+        "en": "none yet",
+        "ru": "пока нет",
+    },
+    "premium_badge": {
+        "uz": "💎",
+        "en": "💎",
+        "ru": "💎",
     },
     "back": {
         "uz": "⬅️ Orqaga",

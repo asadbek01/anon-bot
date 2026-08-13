@@ -169,6 +169,36 @@ async def get_user_stats(telegram_id: int) -> dict:
         return {"received": received, "answered": answered}
 
 
+async def get_advanced_user_stats(telegram_id: int) -> dict:
+    """Faqat Premium foydalanuvchilar uchun: reaksiyalar tahlili va javob foizi."""
+    async with _pool.acquire() as conn:
+        total_reactions = await conn.fetchval(
+            "SELECT COUNT(*) FROM messages WHERE receiver_id = $1 AND is_reply = FALSE "
+            "AND reaction IS NOT NULL",
+            telegram_id,
+        )
+        top_reaction_row = await conn.fetchrow(
+            "SELECT reaction, COUNT(*) as cnt FROM messages "
+            "WHERE receiver_id = $1 AND is_reply = FALSE AND reaction IS NOT NULL "
+            "GROUP BY reaction ORDER BY cnt DESC LIMIT 1",
+            telegram_id,
+        )
+        received = await conn.fetchval(
+            "SELECT COUNT(*) FROM messages WHERE receiver_id = $1 AND is_reply = FALSE",
+            telegram_id,
+        )
+        answered = await conn.fetchval(
+            "SELECT COUNT(*) FROM messages WHERE sender_id = $1 AND is_reply = TRUE",
+            telegram_id,
+        )
+        reply_rate = round((answered / received) * 100) if received else 0
+        return {
+            "total_reactions": total_reactions,
+            "top_reaction": top_reaction_row["reaction"] if top_reaction_row else None,
+            "reply_rate": reply_rate,
+        }
+
+
 async def get_global_stats() -> dict:
     async with _pool.acquire() as conn:
         users = await conn.fetchval("SELECT COUNT(*) FROM users")

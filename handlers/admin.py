@@ -97,5 +97,9 @@ def _label(user: dict | None, fallback_id: int) -> str:
     if not user:
         return f"ID:{fallback_id}"
     if user["username"]:
-        return f"@{user['username']}"
-    return user["full_name"] or f"ID:{fallback_id}"
+        name = f"@{user['username']}"
+    else:
+        name = user["full_name"] or f"ID:{fallback_id}"
+    if user.get("is_premium"):
+        name = f"{name} 💎"
+    return name

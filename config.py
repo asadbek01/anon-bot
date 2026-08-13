@@ -22,7 +22,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 # Eski yagona narx o'zgaruvchilari (webhook_server.py va boshqa joylarda
 # umumiy default sifatida ishlatiladi)
-PREMIUM_PRICE_STARS = int(os.getenv("PREMIUM_PRICE_STARS", "150"))
+PREMIUM_PRICE_STARS = int(os.getenv("PREMIUM_PRICE_STARS", "99"))
 PREMIUM_PRICE_UZS = int(os.getenv("PREMIUM_PRICE_UZS", "25000"))
 PREMIUM_DAYS = int(os.getenv("PREMIUM_DAYS", "30"))
 
@@ -36,17 +36,17 @@ PREMIUM_PLANS = {
     },
     "7d": {
         "days": 7,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_7D", "50")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_7D", "49")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_7D", "10000")),
     },
     "30d": {
         "days": 30,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_30D", "150")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_30D", "99")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_30D", "25000")),
     },
     "lifetime": {
         "days": 36500,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_LIFETIME", "500")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_LIFETIME", "499")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_LIFETIME", "90000")),
     },
 }

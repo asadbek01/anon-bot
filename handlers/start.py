@@ -104,12 +104,23 @@ async def my_stats(message: Message):
     lang = user["language"]
     stats = await db.get_user_stats(message.from_user.id)
     joined = (user["created_at"] or "")[:10]
-    await message.answer(
-        t(
-            "stats_title",
-            lang,
-            received=stats["received"],
-            answered=stats["answered"],
-            joined=joined,
-        )
+    text = t(
+        "stats_title",
+        lang,
+        received=stats["received"],
+        answered=stats["answered"],
+        joined=joined,
     )
+
+    if await db.is_premium_active(message.from_user.id):
+        adv = await db.get_advanced_user_stats(message.from_user.id)
+        top_reaction = adv["top_reaction"] or t("no_reactions_yet", lang)
+        text += t(
+            "stats_advanced",
+            lang,
+            total_reactions=adv["total_reactions"],
+            top_reaction=top_reaction,
+            reply_rate=adv["reply_rate"],
+        )
+
+    await message.answer(text)
