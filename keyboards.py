@@ -22,6 +22,7 @@ def main_menu_keyboard(lang: str, user_id: int) -> ReplyKeyboardMarkup:
     rows = [
         [KeyboardButton(text=t("main_menu_link", lang)), KeyboardButton(text=t("main_menu_premium", lang))],
         [KeyboardButton(text=t("main_menu_stats", lang)), KeyboardButton(text=t("main_menu_language", lang))],
+        [KeyboardButton(text=t("main_menu_referral", lang)), KeyboardButton(text=t("main_menu_poll", lang))],
         [KeyboardButton(text=t("main_menu_ads", lang))],
     ]
     if user_id in ADMIN_IDS:
@@ -41,7 +42,9 @@ def message_action_keyboard(lang: str, message_id: int, include_reveal: bool = T
 
 
 def _reaction_row(message_id: int) -> list[InlineKeyboardButton]:
-    emojis = ["❤️", "😂", "😮", "😢", "🔥"]
+    # Telegram faqat maxsus ro'yxatdagi emojilarga native reaksiya qo'yishga ruxsat beradi.
+    # Shu sabab bu yerdagi emojilar aynan o'sha ro'yxatdan tanlangan.
+    emojis = ["❤️", "🔥", "😢", "👍", "🎉"]
     return [
         InlineKeyboardButton(text=e, callback_data=f"react:{message_id}:{e}")
         for e in emojis

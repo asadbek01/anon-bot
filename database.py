@@ -37,6 +37,20 @@ CREATE TABLE IF NOT EXISTS payments (
     transaction_id  TEXT,
     created_at      TEXT
 );
+
+CREATE TABLE IF NOT EXISTS referrals (
+    id              SERIAL PRIMARY KEY,
+    referrer_id     BIGINT NOT NULL,
+    referred_id     BIGINT NOT NULL UNIQUE,
+    created_at      TEXT
+);
+
+CREATE TABLE IF NOT EXISTS polls (
+    id              SERIAL PRIMARY KEY,
+    owner_id        BIGINT NOT NULL,
+    question        TEXT NOT NULL,
+    created_at      TEXT
+);
 """
 
 _pool: asyncpg.Pool | None = None
@@ -92,6 +106,26 @@ async def set_language(telegram_id: int, language: str) -> None:
 
 async def set_premium(telegram_id: int, days: int) -> str:
     until = (datetime.datetime.utcnow() + datetime.timedelta(days=days)).isoformat()
+    async with _pool.acquire() as conn:
+        await conn.execute(
+            "UPDATE users SET is_premium = TRUE, premium_until = $1 WHERE telegram_id = $2",
+            until, telegram_id,
+        )
+    return until
+
+
+async def add_premium_days(telegram_id: int, days: int) -> str:
+    """Mavjud Premium muddatga kun qo'shadi (agar hali faol bo'lsa), aks holda
+    hozirdan boshlab yangi muddat beradi. Referal bonuslari uchun ishlatiladi."""
+    user = await get_user(telegram_id)
+    now = datetime.datetime.utcnow()
+    base = now
+    if user and user["is_premium"] and user["premium_until"]:
+        current_until = datetime.datetime.fromisoformat(user["premium_until"])
+        if current_until > now:
+            base = current_until
+
+    until = (base + datetime.timedelta(days=days)).isoformat()
     async with _pool.acquire() as conn:
         await conn.execute(
             "UPDATE users SET is_premium = TRUE, premium_until = $1 WHERE telegram_id = $2",
@@ -215,3 +249,49 @@ async def get_recent_messages(limit: int = 20, offset: int = 0) -> list[dict]:
             "SELECT * FROM messages ORDER BY id DESC LIMIT $1 OFFSET $2", limit, offset
         )
         return [dict(r) for r in rows]
+
+
+# ---------- Referal tizimi ----------
+
+async def add_referral(referrer_id: int, referred_id: int) -> bool:
+    """Yangi referalni saqlaydi. Agar bu foydalanuvchi allaqachon kimningdir
+    referali sifatida qayd etilgan bo'lsa (yoki o'z-o'ziga referal bo'lsa),
+    False qaytaradi va bonus berilmaydi."""
+    if referrer_id == referred_id:
+        return False
+    async with _pool.acquire() as conn:
+        try:
+            now = datetime.datetime.utcnow().isoformat()
+            await conn.execute(
+                "INSERT INTO referrals (referrer_id, referred_id, created_at) VALUES ($1, $2, $3)",
+                referrer_id, referred_id, now,
+            )
+            return True
+        except asyncpg.UniqueViolationError:
+            return False
+
+
+async def get_referral_count(referrer_id: int) -> int:
+    async with _pool.acquire() as conn:
+        return await conn.fetchval(
+            "SELECT COUNT(*) FROM referrals WHERE referrer_id = $1", referrer_id
+        )
+
+
+# ---------- So'rovnomalar ----------
+
+async def save_poll(owner_id: int, question: str) -> int:
+    now = datetime.datetime.utcnow().isoformat()
+    async with _pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "INSERT INTO polls (owner_id, question, created_at) VALUES ($1, $2, $3) RETURNING id",
+            owner_id, question, now,
+        )
+        return row["id"]
+
+
+async def get_poll_count(owner_id: int) -> int:
+    async with _pool.acquire() as conn:
+        return await conn.fetchval(
+            "SELECT COUNT(*) FROM polls WHERE owner_id = $1", owner_id
+        )

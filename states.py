@@ -8,3 +8,8 @@ class AnonMessageStates(StatesGroup):
 
 class AdStates(StatesGroup):
     waiting_for_ad_message = State()   # Reklama bo'limiga xabar yozayotganda
+
+
+class PollStates(StatesGroup):
+    waiting_for_question = State()   # So'rovnoma savolini kutish
+    waiting_for_options = State()    # So'rovnoma variantlarini kutish

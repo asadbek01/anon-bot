@@ -22,7 +22,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 # Eski yagona narx o'zgaruvchilari (webhook_server.py va boshqa joylarda
 # umumiy default sifatida ishlatiladi)
-PREMIUM_PRICE_STARS = int(os.getenv("PREMIUM_PRICE_STARS", "99"))
+PREMIUM_PRICE_STARS = int(os.getenv("PREMIUM_PRICE_STARS", "150"))
 PREMIUM_PRICE_UZS = int(os.getenv("PREMIUM_PRICE_UZS", "25000"))
 PREMIUM_DAYS = int(os.getenv("PREMIUM_DAYS", "30"))
 
@@ -36,17 +36,17 @@ PREMIUM_PLANS = {
     },
     "7d": {
         "days": 7,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_7D", "49")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_7D", "50")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_7D", "10000")),
     },
     "30d": {
         "days": 30,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_30D", "99")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_30D", "150")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_30D", "25000")),
     },
     "lifetime": {
         "days": 36500,
-        "stars": int(os.getenv("PREMIUM_PRICE_STARS_LIFETIME", "499")),
+        "stars": int(os.getenv("PREMIUM_PRICE_STARS_LIFETIME", "500")),
         "uzs": int(os.getenv("PREMIUM_PRICE_UZS_LIFETIME", "90000")),
     },
 }
@@ -62,6 +62,11 @@ PAYME_TEST_KEY = os.getenv("PAYME_TEST_KEY", "")
 
 WEBHOOK_HOST = os.getenv("WEBHOOK_HOST", "0.0.0.0")
 WEBHOOK_PORT = int(os.getenv("WEBHOOK_PORT", "8080"))
+
+# Do'st taklif qilgani uchun beriladigan bonus Premium kunlar soni
+REFERRAL_BONUS_DAYS = int(os.getenv("REFERRAL_BONUS_DAYS", "1"))
+# Bonus olish uchun necha ta do'st taklif qilish kerak (masalan 5 ta do'st -> 1 kun)
+REFERRALS_NEEDED_PER_BONUS = int(os.getenv("REFERRALS_NEEDED_PER_BONUS", "5"))
 
 DEFAULT_LANGUAGE = "uz"
 SUPPORTED_LANGUAGES = ("uz", "en", "ru")

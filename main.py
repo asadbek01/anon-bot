@@ -12,7 +12,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from config import BOT_TOKEN
 import database as db
 
-from handlers import start, anonymous, premium, admin, ads
+from handlers import start, anonymous, premium, admin, ads, referral, poll
 
 logging.basicConfig(level=logging.INFO)
 
@@ -56,6 +56,8 @@ async def main():
     dp.include_router(premium.router)
     dp.include_router(admin.router)
     dp.include_router(ads.router)
+    dp.include_router(referral.router)
+    dp.include_router(poll.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

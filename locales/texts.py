@@ -61,6 +61,16 @@ TEXTS = {
         "en": "📢 Advertising",
         "ru": "📢 Реклама",
     },
+    "main_menu_referral": {
+        "uz": "🎁 Do'st taklif qilish",
+        "en": "🎁 Invite friends",
+        "ru": "🎁 Пригласить друзей",
+    },
+    "main_menu_poll": {
+        "uz": "🎯 So'rovnoma",
+        "en": "🎯 Poll",
+        "ru": "🎯 Опрос",
+    },
     "ask_ad_message": {
         "uz": (
             "📢 <b>Reklama bo'limi</b>\n\n"
@@ -397,6 +407,118 @@ TEXTS = {
         "uz": "✅ Reaksiyangiz qabul qilindi!",
         "en": "✅ Your reaction was recorded!",
         "ru": "✅ Твоя реакция сохранена!",
+    },
+
+    # ---------- Referal tizimi ----------
+    "referral_info": {
+        "uz": (
+            "🎁 <b>Do'stlaringizni taklif qiling!</b>\n\n"
+            "Har <b>{needed} ta do'stingiz</b> shu havola orqali botga birinchi marta "
+            "kirsa, sizga <b>{days} kunlik Premium</b> bonus beriladi — mutlaqo bepul!\n\n"
+            "🔗 Sizning referal havolangiz:\n<code>{link}</code>\n\n"
+            "👥 Taklif qilingan do'stlar soni: <b>{count}</b>\n"
+            "🎉 Jami olingan bonus: <b>{bonus_days} kun</b>\n"
+            "⏳ Keyingi bonusgacha: yana <b>{remaining} ta do'st</b>"
+        ),
+        "en": (
+            "🎁 <b>Invite your friends!</b>\n\n"
+            "For every <b>{needed} friends</b> who open the bot for the first time "
+            "through this link, you get <b>{days} day(s) of Premium</b> for free!\n\n"
+            "🔗 Your referral link:\n<code>{link}</code>\n\n"
+            "👥 Friends invited: <b>{count}</b>\n"
+            "🎉 Total bonus earned: <b>{bonus_days} day(s)</b>\n"
+            "⏳ Until next bonus: <b>{remaining} more friend(s)</b>"
+        ),
+        "ru": (
+            "🎁 <b>Пригласи своих друзей!</b>\n\n"
+            "За каждые <b>{needed} друзей</b>, которые впервые откроют бота по этой "
+            "ссылке, ты получишь <b>{days} дн. Премиум</b> совершенно бесплатно!\n\n"
+            "🔗 Твоя реферальная ссылка:\n<code>{link}</code>\n\n"
+            "👥 Приглашено друзей: <b>{count}</b>\n"
+            "🎉 Всего получено бонуса: <b>{bonus_days} дн.</b>\n"
+            "⏳ До следующего бонуса: ещё <b>{remaining} друзей</b>"
+        ),
+    },
+    "referral_bonus_received": {
+        "uz": (
+            "🎉 <b>Tabriklaymiz!</b> Do'stingiz botga qo'shildi va sizga "
+            "<b>{days} kunlik Premium</b> bonus berildi!"
+        ),
+        "en": (
+            "🎉 <b>Congratulations!</b> Your friend joined the bot and you "
+            "received <b>{days} day(s) of Premium</b> as a bonus!"
+        ),
+        "ru": (
+            "🎉 <b>Поздравляем!</b> Твой друг присоединился к боту, и ты "
+            "получил <b>{days} дн. Премиум</b> в качестве бонуса!"
+        ),
+    },
+
+    # ---------- Anonim so'rovnoma ----------
+    "poll_locked": {
+        "uz": (
+            "🔒 So'rovnoma yaratish faqat <b>Premium</b> foydalanuvchilar uchun.\n"
+            "💎 Premium bo'limidan sotib olib, o'z auditoriyangizdan anonim ovoz yig'ing!"
+        ),
+        "en": (
+            "🔒 Creating polls is only for <b>Premium</b> users.\n"
+            "💎 Get Premium to collect anonymous votes from your audience!"
+        ),
+        "ru": (
+            "🔒 Создание опросов доступно только <b>Премиум</b> пользователям.\n"
+            "💎 Оформи Премиум, чтобы собирать анонимные голоса своей аудитории!"
+        ),
+    },
+    "poll_ask_question": {
+        "uz": "🎯 <b>So'rovnoma yaratish</b>\n\nSavolingizni yozing:",
+        "en": "🎯 <b>Create a poll</b>\n\nWrite your question:",
+        "ru": "🎯 <b>Создание опроса</b>\n\nНапиши свой вопрос:",
+    },
+    "poll_ask_options": {
+        "uz": (
+            "✏️ Endi javob variantlarini vergul bilan ajratib yozing.\n\n"
+            "Masalan: <i>Ha, Yo'q, Bilmayman</i>\n\n"
+            "(kamida 2 ta, ko'pi bilan 10 ta variant)"
+        ),
+        "en": (
+            "✏️ Now write the answer options separated by commas.\n\n"
+            "Example: <i>Yes, No, Not sure</i>\n\n"
+            "(2 to 10 options)"
+        ),
+        "ru": (
+            "✏️ Теперь напиши варианты ответов через запятую.\n\n"
+            "Например: <i>Да, Нет, Не знаю</i>\n\n"
+            "(от 2 до 10 вариантов)"
+        ),
+    },
+    "poll_too_few_options": {
+        "uz": "⚠️ Kamida 2 ta variant kerak. Qaytadan urinib ko'ring:",
+        "en": "⚠️ At least 2 options are needed. Please try again:",
+        "ru": "⚠️ Нужно минимум 2 варианта. Попробуй ещё раз:",
+    },
+    "poll_too_many_options": {
+        "uz": "⚠️ Ko'pi bilan 10 ta variant bo'lishi mumkin. Qaytadan urinib ko'ring:",
+        "en": "⚠️ Maximum 10 options are allowed. Please try again:",
+        "ru": "⚠️ Разрешено максимум 10 вариантов. Попробуй ещё раз:",
+    },
+    "poll_created": {
+        "uz": (
+            "✅ So'rovnomangiz tayyor! Uni forward qilib, istalgan chat, "
+            "kanal yoki guruhga yuboring — ovozlar to'liq anonim tarzda yig'iladi."
+        ),
+        "en": (
+            "✅ Your poll is ready! Forward it to any chat, channel, or group — "
+            "votes are collected completely anonymously."
+        ),
+        "ru": (
+            "✅ Твой опрос готов! Перешли его в любой чат, канал или группу — "
+            "голоса собираются полностью анонимно."
+        ),
+    },
+    "poll_error": {
+        "uz": "❌ So'rovnoma yaratishda xatolik yuz berdi. Savol yoki variantlar juda uzun bo'lishi mumkin.",
+        "en": "❌ Something went wrong creating the poll. The question or options might be too long.",
+        "ru": "❌ Произошла ошибка при создании опроса. Возможно, вопрос или варианты слишком длинные.",
     },
 }
 
